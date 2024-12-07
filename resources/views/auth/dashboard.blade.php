@@ -9,54 +9,52 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="flex justify-center items-center px-4 min-h-screen bg-gray-50">
-    <div class="p-6 w-full max-w-2xl text-center bg-white rounded-lg shadow-lg">
-        <div class="container">
-            @if (session('success'))
-                <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
-                    <button class="float-right text-green-700"
-                        onclick="this.parentElement.style.display='none'">&times;</button>
-                    {{ session('success') }}
-                </div>
-            @endif
-        </div>
-        <h1 class="mb-4 text-3xl font-bold text-gray-800">Welcome to Your Dashboard, {{ Auth::user()->name }}!</h1>
-        <p class="mb-6 text-gray-600">
-            We're glad to have you back. Explore your account or log out when you're done.
-        </p>
-
-        <div class="flex gap-4 justify-center mb-4">
-            @if (Auth::user()->profile)
-                <div class="p-6 text-left bg-white rounded-lg shadow-md">
-                    <h3 class="mb-4 text-lg font-semibold text-gray-800">Profile Information</h3>
-                    <div class="space-y-3">
-                        @foreach (['id' => 'Id:', 'address' => 'Address:', 'position' => 'Position:', 'phone' => 'Phone:'] as $key => $label)
-                            <p class="text-gray-700"><span class="font-medium text-gray-900">{{ $label }}</span>
-                                @if ($key == 'id')
-                                    {{ Auth::id() }}
-                                @else
-                                    {{ Auth::user()->profile->$key }}
-                                @endif
-                            </p>
-                        @endforeach
+<body class="bg-gray-200 font-sans">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="w-full max-w-2xl bg-white p-6 rounded-md shadow-md">
+            <div class="text-center mb-4">
+                @if (session('success'))
+                    <div class="bg-green-100 text-green-800 p-3 rounded-md mb-4">
+                        <button class="text-lg font-bold" onclick="this.parentElement.style.display='none'">&times;</button>
+                        {{ session('success') }}
                     </div>
-                </div>
-            @else
-                <a href="{{ route('profile.create') }}"
-                    class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                    Create Profile
-                </a>
-            @endif
-        </div>
+                @endif
+            </div>
 
-        <form action="{{ route('logout') }}" method="POST">
-            @method('POST')
-            @csrf
-            <button type="submit"
-                class="px-4 py-2 text-sm font-medium text-white rounded-md shadow-sm bg-neutral-800 hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500">
-                Logout
-            </button>
-        </form>
+            <h1 class="text-3xl font-semibold text-gray-800 mb-4">Welcome, {{ Auth::user()->name }}!</h1>
+            <p class="text-gray-600 mb-6">We’re happy to see you. Manage your profile or log out below.</p>
+
+            <div class="mb-6">
+                @if (Auth::user()->profile)
+                    <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Profile</h3>
+                        <div class="text-gray-700">
+                            @foreach (['id' => 'ID:', 'address' => 'Address:', 'position' => 'Position:', 'phone' => 'Phone:'] as $key => $label)
+                                <p><span class="font-medium text-gray-900">{{ $label }}</span>
+                                    @if ($key == 'id')
+                                        {{ Auth::id() }}
+                                    @else
+                                        {{ Auth::user()->profile->$key }}
+                                    @endif
+                                </p>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('profile.create') }}" class="w-full text-center inline-block bg-blue-500 text-white py-2 rounded-md mt-4 hover:bg-blue-600">
+                        Create Profile
+                    </a>
+                @endif
+            </div>
+
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                @method('POST')
+                <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-gray-900">
+                    Logout
+                </button>
+            </form>
+        </div>
     </div>
 </body>
 
